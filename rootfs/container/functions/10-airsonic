@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
+
+airsonic_bootstrap_filesystem() {
+    create_folder \
+                    "${CONFIG_PATH},\
+                    ${CONFIG_PATH}/transcode,\
+                    ${DATA_PATH},\
+                    ${DATA_PATH}/music,\
+                    ${DATA_PATH}/playlists,\
+                    ${DATA_PATH}/podcasts,\
+                    ${LOG_PATH}" \
+                    "${AIRSONIC_USER}":"${AIRSONIC_GROUP}" traefik:traefik 755
+
+    if [ ! -e "${CONFIG_PATH}"/transcode/ffmpeg ] ; then
+        ln -sf /usr/bin/ffmpeg "${CONFIG_PATH}"/transcode/
+    fi
+
+    if [ ! -e  "${CONFIG_PATH}"/transcode/flac ] ; then
+        ln -sf /usr/bin/flac "${CONFIG_PATH}"/transcode/
+    fi
+
+    if [ ! -e "${CONFIG_PATH}"/transcode/lame  ]; then
+        ln -sf /usr/bin/lame "${CONFIG_PATH}"/transcode/
+    fi
+}
+
+airsonic_configure_database() {
+    case ${DB_TYPE,,} in
+        mariadb | mysql )
+            print_debug "[configure_database] Using MariaDB/MySQL mode for storing database information"
+            DB_PORT=${DB_PORT:-"3306"}
+            sanity_db
+            db_ready mariadb
+            cat <<EOF | silent sudo -u "${AIRSONIC_USER}" tee "${CONFIG_PATH}/airsonic.properties"
+DatabaseConfigType=embed
+DatabaseConfigEmbedDriver=org.mariadb.jdbc.Driver
+DatabaseConfigEmbedUrl=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+DatabaseConfigEmbedUsername=${DB_USER}
+DatabaseConfigEmbedPassword=${DB_PASS}
+EOF
+        ;;
+        internal )
+            print_debug "[configure_database] Using internal liquibase"
+            cat <<EOF | silent sudo -u "${AIRSONIC_USER}" tee "${CONFIG_PATH}/airsonic.properties"
+DatabaseConfigType=embed
+DatabaseConfigEmbedDriver=org.hsqldb.jdbcDriver
+DatabaseConfigEmbedUrl=jdbc:hsqldb:file:${CONFIG_PATH}/db/airsonic
+DatabaseConfigEmbedUsername=sa
+DatabaseConfigEmbedPassword=
+EOF
+        ;;
+        postgres | postgresql )
+            print_debug "[configure_database] Using Postgresql mode for storing database information"
+            DB_PORT=${DB_PORT:-"5432"}
+            sanity_db
+            db_ready postgres
+            cat <<EOF | silent sudo -u "${AIRSONIC_USER}" tee "${CONFIG_PATH}/airsonic.properties"
+DatabaseConfigType=embed
+DatabaseConfigEmbedDriver=org.postgresql.Driver
+DatabaseConfigEmbedUrl=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?stringtype=unspecified
+DatabaseConfigEmbedUsername=${DB_USER}
+DatabaseConfigEmbedPassword=${DB_PASS}
+DatabaseUsertableQuote="
+EOF
+        ;;
+    esac
+}

@@ -1,64 +1,135 @@
-# github.com/tiredofit/docker-airsonic-advanced
-
-
-[![GitHub release](https://img.shields.io/github/v/tag/tiredofit/docker-airsonic-advanced?style=flat-square)](https://github.com/tiredofit/docker-airsonic-advanced/releases/latest)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/tiredofit/docker-airsonic-advanced/main.yml?branch=main&style=flat-square)](https://github.com/tiredofit/docker-airsonic-advanced/actions)
-[![Docker Stars](https://img.shields.io/docker/stars/tiredofit/nginx.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/nginx/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/tiredofit/airsonic-advanced.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/tiredofit/airsonic-advanced/)
-[![Become a sponsor](https://img.shields.io/badge/sponsor-tiredofit-181717.svg?logo=github&style=flat-square)](https://github.com/sponsors/tiredofit)
-[![Paypal Donate](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square)](https://www.paypal.me/tiredofit)
-
-* * *
+# nfrastack/container-airsonic-advanced
 
 ## About
 
-This will build a Docker image for [Airsonic Advanced](https://www.nginx.org), for serving a music collection
-
-
+This repository will build a container for [Airsonic Advanced](https://www.airsonic-advanced.io), for serving a music collection.
 
 ## Maintainer
 
-- [Dave Conroy](https://github.com/tiredofit)
+* [Nfrastack](https://www.nfrastack.com)
 
-  - [Networking](#networking)
-- [Maintenance](#maintenance)
-  - [Shell Access](#shell-access)
-- [Support](#support)
-  - [Usage](#usage)
-  - [Bugfixes](#bugfixes)
-  - [Feature Requests](#feature-requests)
-  - [Updates](#updates)
-- [License](#license)
-- [References](#references)
+## Table of Contents
+
+* [About](#about)
+* [Maintainer](#maintainer)
+* [Table of Contents](#table-of-contents)
+* [Installation](#installation)
+  * [Prebuilt Images](#prebuilt-images)
+  * [Quick Start](#quick-start)
+  * [Persistent Storage](#persistent-storage)
+* [Configuration](#configuration)
+  * [Environment Variables](#environment-variables)
+  * [Users and Groups](#users-and-groups)
+  * [Networking](#networking)
+* [Maintenance](#maintenance)
+  * [Shell Access](#shell-access)
+* [Support & Maintenance](#support--maintenance)
+* [License](#license)
+* [References](#references)
+
+## Installation
+
+### Prebuilt Images
+
+Feature limited builds of the image are available on the [Github Container Registry](https://github.com/nfrastack/container-airsonic-advanced/pkgs/container/container-airsonic-advanced) and [Docker Hub](https://hub.docker.com/r/nfrastack/airsonic-advanced).
+
+To unlock advanced features, one must provide a code to be able to change specific environment variables from defaults. Support the development to gain access to a code.
+
+To get access to the image use your container orchestrator to pull from the following locations:
+
+```
+ghcr.io/nfrastack/container-airsonic-advanced:(image_tag)
+docker.io/nfrastack/airsonic-advanced:(image_tag)
+```
+
+Image tag syntax is:
+
+`<image>:<optional tag>`
+
+Example:
+
+`ghcr.io/nfrastack/container-airsonic-advanced:latest` or
+
+`ghcr.io/nfrastack/container-airsonic-advanced:1.0`
+
+* `latest` will be the most recent commit
+* An optional `tag` may exist that matches the [CHANGELOG](CHANGELOG.md) - These are the safest
+
+Have a look at the container registries and see what tags are available.
+
+#### Multi-Architecture Support
+
+Images are built for `amd64` by default, with optional support for `arm64` and other architectures.
+
+### Quick Start
+
+* The quickest way to get started is using [docker-compose](https://docs.docker.com/compose/). See the examples folder for a working [compose.yml](examples/compose.yml) that can be modified for your use.
+
+* Map [persistent storage](#persistent-storage) for access to configuration and data files for backup.
+* Set various [environment variables](#environment-variables) to understand the capabilities of this image.
+
+### Persistent Storage
+
+The following directories/files should be mapped for persistent storage in order to utilize the container effectively.
+
+| Folder                 | Description                                                                                                |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `/config`              | (Optional) - Configuration folder                          |
+| `/data`           | Data folder to hold music, podcasts etc|
+
+### Environment Variables
+
+#### Base Images used
+
+This image relies on a customized base image in order to work.
+Be sure to view the following repositories to understand all the customizable options:
+
+| Image                                                   | Description |
+| ------------------------------------------------------- | ----------- |
+| [OS Base](https://github.com/nfrastack/container-base/) | Base Image  |
+
+Below is the complete list of available options that can be used to customize your installation.
+
+* Variables showing an 'x' under the `Advanced` column can only be set if the containers advanced functionality is enabled.
+
+#### Core Configuration
+
+#### General Settings
+
+| Parameter              | Description                                                  | Default                    | Advanced |
+| ---------------------- | ------------------------------------------------------------ | -------------------------- | -------- |
+| `CONFIG_PATH`          | Where configuration files are kept                           | `/config`                  |          |
+| `DATA_PATH`            | Root Volatile Data folder                                    | `/data/`                   |          |
+
+## Users and Groups
+
+| Type  | Name      | ID   |
+| ----- | --------- | ---- |
+| User  | `airsonic` | 4040 |
+| Group | `airsonic` | 4040 |
+
+### Networking
+
+| Port  | Protocol | Description |
+| ----- | -------- | ----------- |
+| `4040`  | tcp      | Airsonic Advanced Interface       |
 
 * * *
+
 ## Maintenance
 
 ### Shell Access
 
-For debugging and maintenance purposes you may want access the containers shell.
+For debugging and maintenance, `bash` and `sh` are available in the container.
 
-``bash
-docker exec -it (whatever your container name is) bash
-``
-## Support
+## Support & Maintenance
 
-These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
-### Usage
-- The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
-- [Sponsor me](https://tiredofit.ca/sponsor) for personalized support
-### Bugfixes
-- Please, submit a [Bug Report](issues/new) if something isn't working as expected. I'll do my best to issue a fix in short order.
-
-### Feature Requests
-- Feel free to submit a feature request, however there is no guarantee that it will be added, or at what timeline.
-- [Sponsor me](https://tiredofit.ca/sponsor) regarding development of features.
-
-### Updates
-- Best effort to track upstream changes, More priority if I am actively using the image in a production environment.
-- [Sponsor me](https://tiredofit.ca/sponsor) for up to date releases.
+* For community help, tips, and community discussions, visit the [Discussions board](/discussions).
+* For personalized support or a support agreement, see [Nfrastack Support](https://nfrastack.com/).
+* To report bugs, submit a [Bug Report](issues/new). Usage questions will be closed as not-a-bug.
+* Feature requests are welcome, but not guaranteed. For prioritized development, consider a support agreement.
+* Updates are best-effort, with priority given to active production use and support agreements.
 
 ## License
-MIT. See [LICENSE](LICENSE) for more details.
-## References
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

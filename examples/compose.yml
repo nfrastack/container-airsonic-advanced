@@ -1,10 +1,10 @@
 services:
- 
+
   airsonic-advanced-app:
-    image: tiredofit/airsonic-advanced:latest
+    image: docker.io/nfrastack/airsonic-advanced:latest
     container_name: airsonic-advanced-app
     labels:
-      - traefik.enable=true 
+      - traefik.enable=true
       - traefik.http.routers.airsonic.rule=Host(`airsonic.example.com`)
       - traefik.http.services.airsonic.loadbalancer.server.port=4040
     volumes:
@@ -14,23 +14,25 @@ services:
       - ./data/playlists:/data/playlists
     environment:
       - TIMEZONE=America/Vancouver
+
       - DB_TYPE=mariadb
+      - DB_HOST=airsonic-advanced-db
       - DB_USER=airsonic
       - DB_NAME=airsonic
       - DB_PASS=airsonic
-      - DB_HOST=airsonic-advanced-db
     networks:
       - proxy
       - services
     restart: always
 
   airsonic-advanced-db:
-    image: tiredofit/mariadb
+    image: docker.io/tiredofit/mariadb
     container_name: airsonic-advanced-db
     volumes:
       - ./db:/var/lib/mysql
     environment:
       - TIMEZONE=America/Vancouver
+
       - ROOT_PASS=password
       - DB_NAME=airsonic
       - DB_USER=airsonic
@@ -41,13 +43,12 @@ services:
 
   airsonic-advanced-db-backup:
     container_name: airsonic-advanced-db-backup
-    image: tiredofit/db-backup
-    links:
-     - airsonic-advanced-db
+    image: docker.io/tiredofit/db-backup
     volumes:
       - ./dbbackup:/backup
     environment:
       - TIMEZONE=America/Vancouver
+
       - DB01_HOST=airsonic-advanced-db
       - DB01_TYPE=mariadb
       - DB01_NAME=airsonic

@@ -1,17 +1,22 @@
 #!/command/with-contenv bash
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
 
-source /assets/functions/00-container
-prepare_service
-PROCESS_NAME="airsonic"
+source /container/base/functions/container/init
+prepare_service 10-airsonic
+SERVICE_NAME="airsonic-advanced"
 
-prepare_service
-liftoff
+check_container_initialized
+check_service_initialized init
 
 URL_BASE="/${URL_PATH}"
-IFS=" " read -r -a RUN_ARRAY <<< "$EXTRA_OPTIONS"
+IFS=" " read -r -a RUN_ARRAY <<< "${AIRSONIC_ARGS}"
+
+liftoff
 
 cd "${AIRSONIC_ADVANCED_HOME}" || exit
-print_info "Starting Airsonic Advanced ${AIRSONIC_VERSION}"
+print_start "Starting Airsonic Advanced $(grep -o "ADD: Airsonic Advanced .* |" /container/build/${IMAGE_NAME/\//_}/build.log | awk '{print $4}')"${AIRSONIC_VERSION}"
 cd /app
 exec s6-setuidgid ${AIRSONIC_USER} java \
             -Dlog4j2.formatMsgNoLookups=true \

@@ -1,4 +1,6 @@
-#!/command/with-contenv bash
+# SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
+#
+# SPDX-License-Identifier: MIT
 
 AIRSONIC_USER=${AIRSONIC_USER:-"airsonic"}
 AIRSONIC_GROUP=${AIRSONIC_GROUP:-"airsonic"}
