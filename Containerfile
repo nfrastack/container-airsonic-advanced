@@ -10,11 +10,11 @@ ARG \
 FROM ${BASE_IMAGE}:${DISTRO}_${DISTRO_VARIANT}
 
 LABEL \
-        org.opencontainers.image.title="AIRSONIC" \
-        org.opencontainers.image.description="Reverse proxy and ingress controller" \
-        org.opencontainers.image.url="https://hub.docker.com/r/nfrastack/gcds" \
-        org.opencontainers.image.documentation="https://github.com/nfrastack/container-gcds/blob/main/README.md" \
-        org.opencontainers.image.source="https://github.com/nfrastack/container-gcds.git" \
+        org.opencontainers.image.title="Airsonic Advanced" \
+        org.opencontainers.image.description="Media Library and player" \
+        org.opencontainers.image.url="https://hub.docker.com/r/nfrastack/airsonic-advanced" \
+        org.opencontainers.image.documentation="https://github.com/nfrastack/container-airsonic-advanced/blob/main/README.md" \
+        org.opencontainers.image.source="https://github.com/nfrastack/container-airsonic-advanced.git" \
         org.opencontainers.image.authors="Nfrastack <code@nfrastack.com>" \
         org.opencontainers.image.vendor="Nfrastack <https://www.nfrastack.com>" \
         org.opencontainers.image.licenses="MIT"
