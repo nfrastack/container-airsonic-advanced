@@ -2,9 +2,10 @@
 # SPDX-FileCopyrightText: © 2025 Nfrastack <code@nfrastack.com>
 #
 # SPDX-License-Identifier: MIT
-source /assets/functions/00-container
+
+source /container/base/functions/container/init
 prepare_service
-PROCESS_NAME="airsonic-advanced"
+SERVICE_NAME="airsonic-advanced"
 
 airsonic_bootstrap_filesystem
 airsonic_configure_database
