@@ -15,8 +15,7 @@ IFS=" " read -r -a RUN_ARRAY <<< "${AIRSONIC_ARGS}"
 
 liftoff
 
-cd "${AIRSONIC_ADVANCED_HOME}" || exit
-print_start "Starting Airsonic Advanced $(grep -o "ADD: Airsonic Advanced .* |" /container/build/${IMAGE_NAME/\//_}/build.log | awk '{print $4}')"${AIRSONIC_VERSION}"
+print_start "Starting Airsonic Advanced $(grep -o "ADD: Airsonic Advanced .* | /container/build/${IMAGE_NAME/\//_}/build.log | awk '{print $4}')"
 cd /app
 exec s6-setuidgid ${AIRSONIC_USER} java \
             -Dlog4j2.formatMsgNoLookups=true \
