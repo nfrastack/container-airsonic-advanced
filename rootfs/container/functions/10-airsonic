@@ -11,7 +11,7 @@ airsonic_bootstrap_filesystem() {
                     ${DATA_PATH}/playlists,\
                     ${DATA_PATH}/podcasts,\
                     ${LOG_PATH}" \
-                    "${AIRSONIC_USER}":"${AIRSONIC_GROUP}" traefik:traefik 755
+                    "${AIRSONIC_USER}":"${AIRSONIC_GROUP}" 755
 
     if [ ! -e "${CONFIG_PATH}"/transcode/ffmpeg ] ; then
         ln -sf /usr/bin/ffmpeg "${CONFIG_PATH}"/transcode/
