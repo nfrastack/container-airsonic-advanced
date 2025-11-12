@@ -26,10 +26,10 @@ services:
     restart: always
 
   airsonic-advanced-db:
-    image: docker.io/tiredofit/mariadb
+    image: docker.io/nfrastack/mariadb
     container_name: airsonic-advanced-db
     volumes:
-      - ./db:/var/lib/mysql
+      - ./db:/data
     environment:
       - TIMEZONE=America/Vancouver
 

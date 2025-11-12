@@ -13,16 +13,16 @@ airsonic_bootstrap_filesystem() {
                     ${LOG_PATH}" \
                     "${AIRSONIC_USER}":"${AIRSONIC_GROUP}" 755
 
-    if [ ! -e "${CONFIG_PATH}"/transcode/ffmpeg ] ; then
-        ln -sf /usr/bin/ffmpeg "${CONFIG_PATH}"/transcode/
+    if [ ! -e "${CONFIG_PATH%/}"/transcode/ffmpeg ] ; then
+        ln -sf /usr/bin/ffmpeg "${CONFIG_PATH%/}"/transcode/
     fi
 
-    if [ ! -e  "${CONFIG_PATH}"/transcode/flac ] ; then
-        ln -sf /usr/bin/flac "${CONFIG_PATH}"/transcode/
+    if [ ! -e  "${CONFIG_PATH%/}"/transcode/flac ] ; then
+        ln -sf /usr/bin/flac "${CONFIG_PATH%/}"/transcode/
     fi
 
-    if [ ! -e "${CONFIG_PATH}"/transcode/lame  ]; then
-        ln -sf /usr/bin/lame "${CONFIG_PATH}"/transcode/
+    if [ ! -e "${CONFIG_PATH%/}"/transcode/lame  ]; then
+        ln -sf /usr/bin/lame "${CONFIG_PATH%/}"/transcode/
     fi
 }
 
